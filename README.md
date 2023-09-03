@@ -1,11 +1,5 @@
 # repository-chat
-
-
-
-
-to run:
-
-
+# to run:
 python3 -m venv venv
 . venv/bin/activate
 pip install -r requirements.txt 
@@ -16,5 +10,5 @@ go to link:
 http://127.0.0.1:8000/docs
 
 
-to run tests:
+# to run tests:
 python run_tests.py
