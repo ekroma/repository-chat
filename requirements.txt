@@ -1,0 +1,10 @@
+fastapi
+uvicorn[standard]
+alembic
+aiosqlite
+python-jose 
+pytest
+bcrypt
+python-decouple
+httpx
+pytest-asyncio
