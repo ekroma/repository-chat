@@ -7,4 +7,4 @@ pytest
 bcrypt
 python-decouple
 httpx
-pytest-asyncio
+python-multipart
