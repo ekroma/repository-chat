@@ -1,10 +1,8 @@
-from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import relationship
 from sqlalchemy import Column, String
-from fastapi import Depends
 import uuid
 
-from config.db import Base, get_async_session
+from config.db import Base
 
 
 SECRET = "SECRET"

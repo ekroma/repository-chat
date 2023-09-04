@@ -1,5 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
+from datetime import datetime
 from fastapi import Depends, APIRouter, HTTPException, Query
 
 from apps.user.views import get_current_user
@@ -14,7 +15,6 @@ message_router = APIRouter()
 @message_router.get("/messages", response_model=list[MessageOutput])
 async def get_messages(
     sender_id: str = Query(None),
-    receiver_id: str = Query(None),
     time_delivered: str = Query(None),
     db: AsyncSession = Depends(get_async_session),
 ):
@@ -24,24 +24,16 @@ async def get_messages(
 
             if sender_id:
                 query = query.where(Message.sender_id == sender_id)
-            if receiver_id:
-                query = query.where(Message.receiver_id == receiver_id)
             if time_delivered:
-                query = query.where(Message.time_delivered == time_delivered)
+                try:
+                    # Преобразовываем входящее время в объект datetime
+                    time_delivered_datetime = datetime.fromisoformat(time_delivered)
+                    query = query.where(Message.time_delivered == time_delivered_datetime)
+                except ValueError:
+                    raise HTTPException(status_code=400, detail="Некорректный формат времени")
 
             messages = await db.execute(query)
             messages_data = messages.scalars().all()
-
-            messages_data = [
-                MessageOutput(
-                    id=message.id,
-                    sender_id=message.sender_id,
-                    receiver_id=message.receiver_id,
-                    time_delivered=message.time_delivered,
-                    text=message.text,
-                )
-                for message in messages_data
-            ]
 
             return messages_data
     except Exception as e:

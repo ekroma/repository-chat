@@ -15,6 +15,7 @@ class MessageOutput(MessageBase):
     receiver_id: str|None = None
     time_delivered: datetime|None = None
     chat_id: int
+    text: str
 
     class ConfigDict:
         from_attributes = True
