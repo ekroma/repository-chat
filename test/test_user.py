@@ -19,35 +19,26 @@ def test_get_users():
     # Отправить GET-запрос для получения списка пользователей
     response = client.get("/auth/users/")
     assert response.status_code == 200
-    assert "users" in response.json()
+    assert all("id" in user for user in response.json())
 
 def test_get_user_by_username():
     # Отправить GET-запрос для получения пользователя по имени пользователя
-    response = client.get("/auth/user/?identifier=testuser")
+    response = client.get("/auth/user/?username=testuser")
     assert response.status_code == 200
     assert "id" in response.json()
 
 def test_get_user_not_found():
     # Попытка получения несуществующего пользователя
-    response = client.get("/auth/user/?identifier=nonexistentuser")
+    response = client.get("/auth/user/?username=nonexistentuser")
     assert response.status_code == 404
 
-
 def test_delete_user():
-    # Получаем токен для пользователя
-    response = client.post("/auth/jwt/login", data={"username": "testuser", "password": "testpassword"})
-    assert response.status_code == 200
-    access_token = response.json()["access_token"]
 
     # Удаляем пользователя
-    response = client.request(
-        "DELETE",
-        "/auth/user/?identifier=testuser",
-        headers={"Authorization": f"Bearer {access_token}"},
-    )
+    response = client.delete("/auth/user/?username=testuser")
     assert response.status_code == 200
     assert response.json()["message"] == "User deleted successfully"
 
     # Попытка получения удаленного пользователя должна вернуть 404
-    response = client.get("/auth/user/?identifier=testuser")
+    response = client.get("/auth/user/?username=testuser")
     assert response.status_code == 404

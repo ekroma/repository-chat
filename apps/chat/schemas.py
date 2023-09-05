@@ -16,5 +16,5 @@ class ChatOut(ChatBase):
     status:int
     users: list[UserRead]
 
-    class ConfigDict:
+    class Config:
         from_attributes = True

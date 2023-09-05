@@ -17,6 +17,6 @@ class MessageOutput(MessageBase):
     chat_id: int
     text: str
 
-    class ConfigDict:
+    class Config:
         from_attributes = True
 

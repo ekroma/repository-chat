@@ -48,20 +48,12 @@ def test_get_all_chats():
 
 
 def test_delete_user():
-    # Получаем токен для пользователя
-    response = client.post("/auth/jwt/login", data={"username": "testuser", "password": "testpassword"})
-    assert response.status_code == 200
-    access_token = response.json()["access_token"]
 
     # Удаляем пользователя
-    response = client.request(
-        "DELETE",
-        "/auth/user/?identifier=testuser",
-        headers={"Authorization": f"Bearer {access_token}"},
-    )
+    response = client.delete("/auth/user/?username=testuser")
     assert response.status_code == 200
     assert response.json()["message"] == "User deleted successfully"
 
     # Попытка получения удаленного пользователя должна вернуть 404
-    response = client.get("/auth/user/?identifier=testuser")
+    response = client.get("/auth/user/?username=testuser")
     assert response.status_code == 404

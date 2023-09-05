@@ -11,5 +11,5 @@ class UserCreate(UserBase):
 class UserRead(UserBase):
     id: str
 
-    class ConfigDict:
+    class Config:
         from_attributes = True
